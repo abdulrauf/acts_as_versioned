@@ -12,22 +12,22 @@ Gem::Specification.new do |s|
   ## Leave these as is they will be modified for you by the rake gemspec task.
   ## If your rubyforge_project name is different, then edit it and comment out
   ## the sub! line in the Rakefile
-  s.name              = 'acts_as_versioned'
-  s.version           = '0.6.0'
-  s.date              = '2010-07-19'
-  s.rubyforge_project = 'acts_as_versioned'
+  s.name              = 'freerange_acts_as_versioned'
+  s.version           = '0.7.0'
+  s.date              = '2011-12-12'
+  s.rubyforge_project = 'freerange_acts_as_versioned'
 
   ## Make sure your summary is short. The description may be as long
   ## as you like.
-  s.summary     = "Add simple versioning to ActiveRecord models."
-  s.description = "Add simple versioning to ActiveRecord models."
+  s.summary     = "Add simple versioning to ActiveRecord models. This version supports rails 3.1.1"
+  s.description = "Add simple versioning to ActiveRecord models. rails 3.1.1"
 
   ## List the primary authors. If there are a bunch of authors, it's probably
   ## better to set the email to an email list or something. If you don't have
   ## a custom homepage, consider using your GitHub URL or the like.
-  s.authors  = ["Rick Olson"]
-  s.email    = 'technoweenie@gmail.com'
-  s.homepage = 'http://github.com/technoweenie/acts_as_versioned'
+  s.authors  = ["Abdul Rauf"]
+  s.email    = 'abdul.rauf.au@gmail.com'
+  s.homepage = 'http://github.com/abdulrauf/acts_as_versioned'
 
   ## This gets added to the $LOAD_PATH so that 'lib/NAME.rb' can be required as
   ## require 'NAME.rb' or'/lib/NAME/file.rb' can be as require 'NAME/file.rb'
