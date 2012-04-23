@@ -309,7 +309,7 @@ module ActiveRecord #:nodoc:
           # Clears old revisions if a limit is set with the :limit option in <tt>acts_as_versioned</tt>.
           # Override this method to set your own criteria for clearing old versions.
           def clear_old_auto_save_versions
-            excess_baggage = self.class.versioned_class.where(["autosave = ? AND #{self.class.version_column} <= ? and #{self.class.versioned_foreign_key} = ?", true, excess_baggage, id]).order("updated_at desc")
+            excess_baggage = self.class.versioned_class.where(["autosave = ? and #{self.class.versioned_foreign_key} = ?", true,id]).order("updated_at desc").all
             if excess_baggage.length > 1
               excess_baggage.last.destroy
             end
