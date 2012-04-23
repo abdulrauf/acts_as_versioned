@@ -67,7 +67,7 @@ module ActiveRecord #:nodoc:
     #
     # See ActiveRecord::Acts::Versioned::ClassMethods#acts_as_versioned for configuration options
     module Versioned
-      VERSION   = "0.6.0"
+      VERSION   = "0.8.0"
       CALLBACKS = [:set_new_version, :save_version, :save_version?]
 
       # == Configuration options
@@ -290,7 +290,9 @@ module ActiveRecord #:nodoc:
               rev.send("#{self.class.version_column}=", send(self.class.version_column))
               rev.send("#{self.class.versioned_foreign_key}=", id)
               rev.send("autosave=", true)
-              rev.save
+              saving_status = rev.save
+              clear_old_auto_save_versions
+              saving_status
             end
           end
 
@@ -301,6 +303,15 @@ module ActiveRecord #:nodoc:
             excess_baggage = send(self.class.version_column).to_i - self.class.max_version_limit
             if excess_baggage > 0
               self.class.versioned_class.delete_all ["#{self.class.version_column} <= ? and #{self.class.versioned_foreign_key} = ?", excess_baggage, id]
+            end
+          end
+          
+          # Clears old revisions if a limit is set with the :limit option in <tt>acts_as_versioned</tt>.
+          # Override this method to set your own criteria for clearing old versions.
+          def clear_old_auto_save_versions
+            excess_baggage = self.class.versioned_class.where(["autosave = ? AND #{self.class.version_column} <= ? and #{self.class.versioned_foreign_key} = ?", true, excess_baggage, id]).order("updated_at desc")
+            if excess_baggage.length > 1
+              excess_baggage.last.destroy
             end
           end
 
