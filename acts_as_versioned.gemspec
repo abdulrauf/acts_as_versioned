@@ -13,13 +13,13 @@ Gem::Specification.new do |s|
   ## If your rubyforge_project name is different, then edit it and comment out
   ## the sub! line in the Rakefile
   s.name              = 'freerange_acts_as_versioned'
-  s.version           = '0.8.0'
-  s.date              = '2012-04-23'
+  s.version           = '0.8.1'
+  s.date              = '2012-04-24'
   s.rubyforge_project = 'freerange_acts_as_versioned'
 
   ## Make sure your summary is short. The description may be as long
   ## as you like.
-  s.summary     = "Add simple versioning to ActiveRecord models. This version supports rails 3.1.1"
+  s.summary     = "Add simple versioning to ActiveRecord models. This version supports rails 3.1.1. Also it have support for autosave. It introduces new method auto_save_version which keeps 1 autosave version for an object."
   s.description = "Add simple versioning to ActiveRecord models. rails 3.1.1"
 
   ## List the primary authors. If there are a bunch of authors, it's probably

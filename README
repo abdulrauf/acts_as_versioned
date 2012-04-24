@@ -10,15 +10,12 @@ Install
 
 <3 GitHub
 
-* http://github.com/technoweenie/acts_as_versioned
+* http://github.com/abdulrauf/acts_as_versioned
 
 Gemcutter FTW
 
-* http://gemcutter.org/gems/acts_as_versioned
+* http://gemcutter.org/gems/freerange_acts_as_versioned
 
-Subversion
 
-* http://svn.github.com/technoweenie/acts_as_versioned.git
 
-Special thanks to Dreamer on ##rubyonrails for help in early testing.  His ServerSideWiki (http://serversidewiki.com) 
-was the first project to use acts_as_versioned <em>in the wild</em>.
+Add simple versioning to ActiveRecord models. This version supports rails ~>3.1.1. Also it have support for autosave. It introduces new method auto_save_version which keeps 1 autosave version for an object.
