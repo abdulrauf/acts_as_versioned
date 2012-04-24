@@ -310,7 +310,7 @@ module ActiveRecord #:nodoc:
           # Override this method to set your own criteria for clearing old versions.
           def clear_old_auto_save_versions
             excess_baggage = self.class.versioned_class.where(["autosave = ? and #{self.class.versioned_foreign_key} = ?", true,id]).order("updated_at desc").all
-            if excess_baggage.length > 1
+            if excess_baggage.length > 2
               excess_baggage.last.destroy
             end
           end
