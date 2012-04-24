@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   ## If your rubyforge_project name is different, then edit it and comment out
   ## the sub! line in the Rakefile
   s.name              = 'freerange_acts_as_versioned'
-  s.version           = '0.8.1'
+  s.version           = '0.8.2'
   s.date              = '2012-04-24'
   s.rubyforge_project = 'freerange_acts_as_versioned'
 
