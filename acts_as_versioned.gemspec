@@ -7,20 +7,19 @@
 Gem::Specification.new do |s|
   s.specification_version = 2 if s.respond_to? :specification_version=
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.rubygems_version = '1.3.5'
 
   ## Leave these as is they will be modified for you by the rake gemspec task.
   ## If your rubyforge_project name is different, then edit it and comment out
   ## the sub! line in the Rakefile
   s.name              = 'freerange_acts_as_versioned'
-  s.version           = '0.8.2'
-  s.date              = '2012-04-24'
+  s.version           = '1.0.0'
+  s.date              = '2013-08-15'
   s.rubyforge_project = 'freerange_acts_as_versioned'
 
   ## Make sure your summary is short. The description may be as long
   ## as you like.
-  s.summary     = "Add simple versioning to ActiveRecord models. This version supports rails 3.1.1. Also it have support for autosave. It introduces new method auto_save_version which keeps 1 autosave version for an object."
-  s.description = "Add simple versioning to ActiveRecord models. rails 3.1.1"
+  s.summary     = "Add simple versioning to ActiveRecord models. This version supports rails 3.2. Also it have support for autosave. It introduces new method auto_save_version which keeps 1 autosave version for an object."
+  s.description = "Add simple versioning to ActiveRecord models. rails 3.2"
 
   ## List the primary authors. If there are a bunch of authors, it's probably
   ## better to set the email to an email list or something. If you don't have
@@ -40,7 +39,7 @@ Gem::Specification.new do |s|
 
   ## List your runtime dependencies here. Runtime dependencies are those
   ## that are needed for an end user to actually USE your code.
-  s.add_dependency('activerecord', ["~> 3.1.1"])
+  s.add_dependency('activerecord', ["~> 3.2"])
 
   ## List your development dependencies here. Development dependencies are
   ## those that are only needed during development
