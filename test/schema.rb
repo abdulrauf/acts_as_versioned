@@ -3,6 +3,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.column :version, :integer
     t.column :title, :string, :limit => 255
     t.column :body, :text
+    t.column :state, :string #Freerange extension for publishable
     t.column :created_on, :datetime
     t.column :updated_on, :datetime
     t.column :author_id, :integer
@@ -18,6 +19,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.column :updated_on, :datetime
     t.column :author_id, :integer
     t.column :revisor_id, :integer
+    t.column :version_status, :string
+    t.column :version_user_id, :integer
   end
   
   add_index :page_versions, [:page_id, :version], :unique => true

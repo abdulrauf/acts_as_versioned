@@ -35,6 +35,12 @@ class VersionedTest < ActiveSupport::TestCase
     assert p.revert_to!(23), "Couldn't revert to 23"
     assert_equal 23, p.version
     assert_equal 'Welcome to the weblg', p.title
+
+    #Freerange extension 
+      #test loaded_version
+      assert_equal p.loaded_version.version , p.version
+      #test status
+      assert_equal p.loaded_version.version_status , 'draft'
   end
 
   def test_versioned_class_name
@@ -145,9 +151,10 @@ class VersionedTest < ActiveSupport::TestCase
       alias_method :feeling_good?, :new_feeling_good
     end
 
-    p = Page.create! :title => "title"
+    p = Page.create! :title => "title", :state => "published"
     assert_equal 1, p.version # version does not increment
     assert_equal 1, p.versions.count
+    assert_equal "published", p.versions.first.version_status
 
     p.update_attributes(:title => 'new title')
     assert_equal 1, p.version # version does not increment

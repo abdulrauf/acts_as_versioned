@@ -166,13 +166,16 @@ module ActiveRecord #:nodoc:
 
         cattr_accessor :versioned_class_name, :versioned_foreign_key, :versioned_table_name, :versioned_inheritance_column,
                        :version_column, :max_version_limit, :track_altered_attributes, :version_condition, :version_sequence_name, :non_versioned_columns,
-                       :version_association_options, :version_if_changed
+                       :version_association_options, :version_if_changed, :version_status_column, :version_user_id_column
 
+        attr_accessor :loaded_version
         self.versioned_class_name         = options[:class_name] || "Version"
         self.versioned_foreign_key        = options[:foreign_key] || self.to_s.foreign_key
         self.versioned_table_name         = options[:table_name] || "#{table_name_prefix}#{base_class.name.demodulize.underscore}_versions#{table_name_suffix}"
         self.versioned_inheritance_column = options[:inheritance_column] || "versioned_#{inheritance_column}"
         self.version_column               = options[:version_column] || 'version'
+        self.version_status_column        = options[:version_status_column] || 'version_status'
+        self.version_user_id_column       = options[:version_user_id_column] || 'version_user_id'
         self.version_sequence_name        = options[:sequence_name]
         self.max_version_limit            = options[:limit].to_i
         self.version_condition            = options[:if] || true
@@ -255,6 +258,8 @@ module ActiveRecord #:nodoc:
                                    :foreign_key => versioned_foreign_key
         versioned_class.send :include, options[:extend] if options[:extend].is_a?(Module)
         versioned_class.sequence_name = version_sequence_name if version_sequence_name
+        versioned_class.belongs_to :user,
+                                   :foreign_key => version_user_id_column if version_user_id_column
       end
 
       module Behaviors
@@ -276,7 +281,25 @@ module ActiveRecord #:nodoc:
             clone_versioned_model(self, rev)
             rev.send("#{self.class.version_column}=", send(self.class.version_column))
             rev.send("#{self.class.versioned_foreign_key}=", id)
+            if rev.respond_to?(self.class.version_status_column)
+              rev.send("#{self.class.version_status_column}=", self._publish_status) if self.respond_to?(:_publish_status)
+              rev.send("#{self.class.version_status_column}=", self.state) if self.respond_to?(:state) && rev.send(self.class.version_status_column).blank? 
+            end
+            if rev.respond_to?(self.class.version_user_id_column)
+              rev.send("#{self.class.version_user_id_column}=", self.current_user_id) if self.respond_to?(:current_user_id)
+            end
             rev.save
+            revert_to_published_version(rev)
+          end
+        end
+
+        def revert_to_published_version(rev)
+          if rev.respond_to?(self.class.version_status_column) && ["revision", "submitted_for_approval"].include?(rev.send(self.class.version_status_column))
+            published_version = self.versions.where(:version_status => 'published').order("version DESC").first
+            unless published_version.blank?
+              self.reload
+              self.revert_to!(published_version)
+            end
           end
         end
 
@@ -299,6 +322,7 @@ module ActiveRecord #:nodoc:
           end
           self.clone_versioned_model(version, self)
           send("#{self.class.version_column}=", version.send(self.class.version_column))
+          self.loaded_version = version
           true
         end
 
@@ -347,7 +371,7 @@ module ActiveRecord #:nodoc:
 
         # Checks whether a new version shall be saved or not.  Calls <tt>version_condition_met?</tt> and <tt>changed?</tt>.
         def save_version?
-          version_condition_met? && altered?
+          version_condition_met? && altered? || (self.respond_to?(:_publish_status) && (self.state_changed?) )
         end
 
         # Checks condition set in the :if option to check whether a revision should be created or not.  Override this for
@@ -424,6 +448,8 @@ module ActiveRecord #:nodoc:
             self.connection.create_table(versioned_table_name, create_table_options) do |t|
               t.column versioned_foreign_key, :integer
               t.column version_column, :integer
+              t.column version_status_column, :string #this field is used for publishing status
+              t.column version_user_id_column, :integer #this field used who has modified this version
             end
 
             self.versioned_columns.each do |col|

@@ -38,6 +38,10 @@ if ActiveRecord::Base.connection.supports_migrations?
       assert_equal 7, Thing::Version.columns.find{|c| c.name == "price"}.precision
       assert_equal 2, Thing::Version.columns.find{|c| c.name == "price"}.scale
 
+      # make sure freerange version additional fields are also created
+      assert_equal :integer, Thing::Version.columns.find{|c| c.name == "version_user_id"}.type
+      assert_equal :string, Thing::Version.columns.find{|c| c.name == "version_status"}.type
+
       # now lets take 'er back down
       ActiveRecord::Migrator.down(File.dirname(__FILE__) + '/fixtures/migrations/')
       assert_raises(ActiveRecord::StatementInvalid) { Thing.create :title => 'blah blah' }
